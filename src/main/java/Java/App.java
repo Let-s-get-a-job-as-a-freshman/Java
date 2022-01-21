@@ -3,13 +3,53 @@
  */
 package Java;
 
+import Java.domain.model.RandomArray;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        RandomArray randomArray = new RandomArray();
+        int count = 0;
+        int[] bonusNumber = new int[1];
+        int buyCount;
+        int autoCount;
+        int manualCount;
+        int[] winningArray;
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("몇 장의 로또를 구매하시겠습니까?");
+        buyCount = sc.nextInt();
+        System.out.println("자동으로 몇 장을 구매하시겠습니까?");
+        autoCount = sc.nextInt();
+
+        manualCount = buyCount - autoCount;
+        int[][] arr = new int[manualCount][6];
+
+        randomArray.manualSelectNumberSet(manualCount, sc, arr);
+
+        // 반복된 숫자 입력했는지 체크 필요, 6개의 숫자를 다 선택했는지 체크
+        // 1 ~ 45 안에서만 입력하는지 체크
+        System.out.println("로또 당첨 번호");
+        // 로또 번호 출력
+        winningArray = randomArray.selectNumber();
+        bonusNumber[0] = randomArray.getBonusNumber();
+        System.out.println(Arrays.toString(winningArray) + ", " + Arrays.toString(bonusNumber));
+
+        System.out.println("고객님의 당첨 여부");
+        while (autoCount > 0) {
+            System.out.println(Arrays.toString(randomArray.getNumberArray(autoCount)));
+            System.out.println(randomArray.getCounting(winningArray, randomArray.getNumberArray(autoCount)));
+
+            autoCount--;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(Arrays.toString(arr[i]));
+            System.out.println(randomArray.getCounting(winningArray, arr));
+        }
     }
 }
 
